@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Przycisk i Menu</string>
+
+    <string name="menu_start">Start Aplikacji</string>
+    <string name="menu_message">Wiadomość z Aplikacji</string>
+    <string name="menu_exit">Wyjście z Aplikacji</string>
+
+</resources>
