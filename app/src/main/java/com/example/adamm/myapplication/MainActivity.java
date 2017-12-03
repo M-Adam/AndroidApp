@@ -1,9 +1,9 @@
 package com.example.adamm.myapplication;
 
-import android.content.res.ColorStateList;
+import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,13 +23,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         showMessageButton();
 
-        tv = (TextView)this.findViewById(R.id.textViewId);
+        tv = this.findViewById(R.id.textViewId);
         tv.setText("Menu kontekstowe");
         registerForContextMenu(tv);
     }
 
     public void showMessageButton(){
-        Button btn1 = (Button) findViewById(R.id.button1);
+        Button btn1 = findViewById(R.id.button1);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_start) {
-            return true;
+            Intent intent = new Intent(this, ContactActivity.class);
+            startActivity(intent);
         }else if (id == R.id.menu_message) {
             tv.setText("Wiadomość z aplikacji");
             tv.setTextColor(Color.RED);
