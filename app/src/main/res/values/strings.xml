@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name">Przycisk i Menu</string>
 
-    <string name="menu_start">Start Aplikacji</string>
+    <string name="menu_start">Dane kontaktowe</string>
     <string name="menu_message">Wiadomość z Aplikacji</string>
     <string name="menu_exit">Wyjście z Aplikacji</string>
+    <string name="title_activity_gallery">Zakładki</string>
+    <string name="tab_text_1">Pierwsza</string>
+    <string name="tab_text_2">Druga</string>
+    <string name="tab_text_3">Trzecia</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

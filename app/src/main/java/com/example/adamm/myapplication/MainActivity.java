@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo
             menuInfo) {
         menu.setHeaderTitle("Menu kontekstowe");
-        menu.add(200, 200, 200, "Element 1");
+        menu.add(200, 200, 200, "Fragmenty - galeria");
         menu.add(300, 300, 300, "Element 2");
     }
 
@@ -89,7 +89,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == 200) {
-            tv.append("\n Kontekstowe 1");
+            Intent intent = new Intent(this, GalleryActivity.class);
+            intent.putExtra("data", "Dodatkowe dane");
+            startActivity(intent);
         }else if (id == 300) {
             tv.append("\n Kontekstowe 2");
         }

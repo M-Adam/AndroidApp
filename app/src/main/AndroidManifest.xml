@@ -19,9 +19,12 @@
         </activity>
         <activity
             android:name=".ContactActivity"
-            android:parentActivityName="com.example.adamm.myapplication.MainActivity">
-
-        </activity>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".GalleryActivity"
+            android:label="@string/title_activity_gallery"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
