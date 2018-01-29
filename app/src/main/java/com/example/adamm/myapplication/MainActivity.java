@@ -1,14 +1,17 @@
 package com.example.adamm.myapplication;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,16 +19,43 @@ public class MainActivity extends AppCompatActivity {
 
     Menu appMenu = null;
     TextView tv = null;
+    MyDatabase mydb = new MyDatabase(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         showMessageButton();
+        setupAddingStudent();
 
         tv = this.findViewById(R.id.textViewId);
         tv.setText("Menu kontekstowe");
+        tv.setMovementMethod(ScrollingMovementMethod.getInstance());
         registerForContextMenu(tv);
+    }
+
+    public void setupAddingStudent(){
+        Button btn2 = findViewById(R.id.button);
+        btn2.setOnClickListener(addStudentListener());
+    }
+
+    public View.OnClickListener addStudentListener(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name, surname, index;
+                name = ((EditText) findViewById(R.id.editTextName)).getText().toString();
+                surname = ((EditText) findViewById(R.id.editTextSurname)).getText().toString();
+                index = ((EditText) findViewById(R.id.editTextIndex)).getText().toString();
+                mydb.addStudent(name, surname, index);
+
+                tv.setText("Lista studentów: ");
+                Cursor c = mydb.getStudents();
+                while(c.moveToNext()){
+                    tv.append("\n " + c.getString(0) + ". " + c.getString(1) + " " + c.getString(2) + " (" + c.getString(3) + "); ");
+                }
+            }
+        };
     }
 
     public void showMessageButton(){
