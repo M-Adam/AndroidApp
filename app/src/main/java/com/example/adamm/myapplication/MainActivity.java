@@ -1,11 +1,15 @@
 package com.example.adamm.myapplication;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    private SmsListener SMSReceiver;
+    private static final int PERMISSION_REQUEST_CODE_READ = 1;
+    private static final int PERMISSION_REQUEST_CODE_RECEIVE = 1;
 
     Menu appMenu = null;
     TextView tv = null;
@@ -32,11 +40,34 @@ public class MainActivity extends AppCompatActivity {
         tv.setText("Menu kontekstowe");
         tv.setMovementMethod(ScrollingMovementMethod.getInstance());
         registerForContextMenu(tv);
+        requireSmsReadingPermission();
+        SMSReceiver = new SmsListener();
+        registerReceiver(SMSReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
     }
 
     public void setupAddingStudent(){
         Button btn2 = findViewById(R.id.button);
         btn2.setOnClickListener(addStudentListener());
+    }
+
+    private void requireSmsReadingPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_SMS)
+                    == PackageManager.PERMISSION_DENIED) {
+                Log.d("permission", "permission denied to READ_SMS - requesting it");
+                String[] permissions = {Manifest.permission.READ_SMS};
+                requestPermissions(permissions, PERMISSION_REQUEST_CODE_READ);
+            }
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.RECEIVE_SMS)
+                    == PackageManager.PERMISSION_DENIED) {
+                Log.d("permission", "permission denied to RECEIVE_SMS - requesting it");
+                String[] permissions = {Manifest.permission.RECEIVE_SMS};
+                requestPermissions(permissions, PERMISSION_REQUEST_CODE_RECEIVE);
+            }
+        }
     }
 
     public View.OnClickListener addStudentListener(){
@@ -60,14 +91,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void showMessageButton(){
         Button btn1 = findViewById(R.id.button1);
+        final MainActivity a = this;
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(
-                        MainActivity.this,
-                        "Nacisnąłeś przycisk",
-                        Toast.LENGTH_LONG
-                ).show();
+                Intent i = new Intent(a, SmsActivity.class);
+                startActivity(i);
             }
         });
     }

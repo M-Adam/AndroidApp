@@ -9,11 +9,11 @@
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="172dp"
+        android:layout_width="270dp"
         android:layout_height="56dp"
         android:fadingEdge="none|horizontal|vertical"
         android:fontFamily="monospace"
-        android:text="Przycisk"
+        android:text="Wysyłanie SMSów"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
