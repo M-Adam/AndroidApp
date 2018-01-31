@@ -1,11 +1,16 @@
 package com.example.adamm.myapplication;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
@@ -19,11 +24,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements SensorEventListener {
 
     private SmsListener SMSReceiver;
     private static final int PERMISSION_REQUEST_CODE_READ = 1;
     private static final int PERMISSION_REQUEST_CODE_RECEIVE = 1;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
 
     Menu appMenu = null;
     TextView tv = null;
@@ -43,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         requireSmsReadingPermission();
         SMSReceiver = new SmsListener();
         registerReceiver(SMSReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
     public void setupAddingStudent(){
@@ -156,4 +165,36 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onContextItemSelected(item);
     }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
+        TextView tvX = (TextView)this.findViewById(R.id.tvaX);
+        TextView tvY = (TextView)this.findViewById(R.id.tvaY);
+        TextView tvZ = (TextView)this.findViewById(R.id.tvaZ);
+        tvX.setText("X axis" + "\t\t" + x);
+        tvY.setText("Y axis" + "\t\t" + y);
+        tvZ.setText("Z axis" + "\t\t" + z);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mSensorManager.registerListener(this, mAccelerometer,
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
 }
