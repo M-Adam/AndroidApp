@@ -33,20 +33,18 @@ public class MainActivity extends AppCompatActivity  implements SensorEventListe
     private Sensor mAccelerometer;
 
     Menu appMenu = null;
-    TextView tv = null;
-    MyDatabase mydb = new MyDatabase(this);
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         showMessageButton();
-        setupAddingStudent();
 
-        tv = this.findViewById(R.id.textViewId);
-        tv.setText("Menu kontekstowe");
-        tv.setMovementMethod(ScrollingMovementMethod.getInstance());
-        registerForContextMenu(tv);
+
+
+        //registerForContextMenu(tv);
         requireSmsReadingPermission();
         SMSReceiver = new SmsListener();
         registerReceiver(SMSReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
@@ -54,10 +52,7 @@ public class MainActivity extends AppCompatActivity  implements SensorEventListe
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
-    public void setupAddingStudent(){
-        Button btn2 = findViewById(R.id.button);
-        btn2.setOnClickListener(addStudentListener());
-    }
+
 
     private void requireSmsReadingPermission() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -79,24 +74,7 @@ public class MainActivity extends AppCompatActivity  implements SensorEventListe
         }
     }
 
-    public View.OnClickListener addStudentListener(){
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String name, surname, index;
-                name = ((EditText) findViewById(R.id.editTextName)).getText().toString();
-                surname = ((EditText) findViewById(R.id.editTextSurname)).getText().toString();
-                index = ((EditText) findViewById(R.id.editTextIndex)).getText().toString();
-                mydb.addStudent(name, surname, index);
 
-                tv.setText("Lista studentów: ");
-                Cursor c = mydb.getStudents();
-                while(c.moveToNext()){
-                    tv.append("\n " + c.getString(0) + ". " + c.getString(1) + " " + c.getString(2) + " (" + c.getString(3) + "); ");
-                }
-            }
-        };
-    }
 
     public void showMessageButton(){
         Button btn1 = findViewById(R.id.button1);
@@ -124,9 +102,7 @@ public class MainActivity extends AppCompatActivity  implements SensorEventListe
             Intent intent = new Intent(this, ContactActivity.class);
             startActivity(intent);
         }else if (id == R.id.menu_message) {
-            tv.setText("Wiadomość z aplikacji");
-            tv.setTextColor(Color.RED);
-            tv.setTextSize(50);
+
         }else if (id == R.id.menu_exit) {
             finish();
             System.exit(0);
@@ -136,6 +112,9 @@ public class MainActivity extends AppCompatActivity  implements SensorEventListe
                     "Nacisnąłeś przycisk dodany programowo",
                     Toast.LENGTH_LONG
             ).show();
+        } else if (id == 200){
+            Intent intent = new Intent(this, StudentActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -143,6 +122,7 @@ public class MainActivity extends AppCompatActivity  implements SensorEventListe
     private void AddRegularMenuItem(Menu menu) {
         int base=Menu.FIRST;
         menu.add(base,100,100,"Pozycja dodana programowo");
+        menu.add(base, 200, 200, "Studenci");
     }
 
     @Override
@@ -161,7 +141,7 @@ public class MainActivity extends AppCompatActivity  implements SensorEventListe
             intent.putExtra("data", "Dodatkowe dane");
             startActivity(intent);
         }else if (id == 300) {
-            tv.append("\n Kontekstowe 2");
+
         }
         return super.onContextItemSelected(item);
     }
